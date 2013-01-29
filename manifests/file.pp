@@ -1,4 +1,4 @@
-define s3cmd::file ($source, $ensure = 'latest', $bucket_location = 'eu-west-1',$path = '/root/.s3cfg', $tries = 3, $try_sleep = 1)  {
+define s3cmd::file ($source, $ensure = 'latest', $bucket_location = 'eu-west-1',$path = '/root/.s3cfg', $tries = 3, $try_sleep = 1, cfg='/root/.s3cfg')  {
     $valid_ensures = [ 'absent', 'present', 'latest' ]
     validate_re($ensure, $valid_ensures)
 
