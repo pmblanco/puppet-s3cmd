@@ -29,7 +29,7 @@ define s3cmd::file ($source, $ensure = 'latest', $bucket_location = 'u-west-1',$
      -> file { $name: 
             mode  => $mode,
             owner => 'root',
-            grou  => 'root',
+            group  => 'root',
      }
 
     }
