@@ -12,7 +12,9 @@ This should basically work as a replacement for file supporting options like:
 * owner
 * mode
 
+
 For full spec please look into particular files.
+
 Any improvements or feedback very much welcomed.
 
 
