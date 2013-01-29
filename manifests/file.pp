@@ -1,4 +1,4 @@
-define s3cmd::file ($source, $ensure = 'latest', $bucket_location = 'eu-west-1',$path = '/root/.s3cfg', $tries = 3, $try_sleep = 1, cfg='/root/.s3cfg')  {
+define s3cmd::file ($source, $ensure = 'latest', $bucket_location = 'eu-west-1',$path = '/root/.s3cfg', $tries = 3, $try_sleep = 1, cfg='/root/.s3cfg', $owner='root', group='root', $mode='600')  {
     include s3cmd::params
 
     $valid_ensures = [ 'absent', 'present', 'latest' ]
@@ -25,7 +25,12 @@ define s3cmd::file ($source, $ensure = 'latest', $bucket_location = 'eu-west-1',
                 try_sleep => $try_sleep ,
                 unless => $unless,
                 require => Package["$s3cmd::params::package"];
-            }
+     }
+     -> file { $name: 
+            mode  => $mode,
+            owner => 'root',
+            grou  => 'root',
+     }
 
     }
 }
