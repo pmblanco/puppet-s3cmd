@@ -1,4 +1,4 @@
-define s3cmd::file ($source, $ensure = 'latest', $bucket_location = 'eu-west-1',$path = '/root/.s3cfg', $tries = 3, $try_sleep = 1, cfg='/root/.s3cfg', $owner='root', group='root', $mode='600')  {
+define s3cmd::file ($source, $ensure = 'latest', $bucket_location = 'u-west-1',$path = '/root/.s3cfg', $tries = 3, $try_sleep = 1, cfg='/root/.s3cfg', $owner='root', group='root', $mode='600')  {
     include s3cmd::params
 
     $valid_ensures = [ 'absent', 'present', 'latest' ]
@@ -12,9 +12,9 @@ define s3cmd::file ($source, $ensure = 'latest', $bucket_location = 'eu-west-1',
 
         # We need to double the code as there is no way to check via s3cmd if the file has changed. I mean if we check it we might as well just pull it off. 
         if ensure == 'latest' {
-            unless => "[ -e ${name} ] && s3cmd --no-progress --dry-run sync ${real_source} ${name} 2>&1 |grep -iq ${name}"
+            $unless = "[ -e ${name} ] && s3cmd --no-progress --dry-run sync ${real_source} ${name} 2>&1 |grep -iq ${name}"
         } else {
-            unless => "[ -e ${name} ]"
+            $unless = "[ -e ${name} ]"
         
         }
     exec { "fetch {$name}": 
