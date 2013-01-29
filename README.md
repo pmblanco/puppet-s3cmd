@@ -5,6 +5,17 @@ Puppet's s3cmd configuration module. Specify different config files and set of a
 
 s3cmd::file part is based on https://github.com/branan/puppet-module-s3file
 
+This should basically work as a replacement for file supporting options like: 
+* ensure
+* recurse
+* group
+* owner
+* mode
+
+For full spec please look into particular files.
+Any improvements or feedback very much welcomed.
+
+
 Usage:
 
 ```
