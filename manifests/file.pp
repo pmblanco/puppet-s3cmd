@@ -1,4 +1,6 @@
 define s3cmd::file ($source, $ensure = 'latest', $bucket_location = 'eu-west-1',$path = '/root/.s3cfg', $tries = 3, $try_sleep = 1, cfg='/root/.s3cfg')  {
+    include s3cmd::params
+
     $valid_ensures = [ 'absent', 'present', 'latest' ]
     validate_re($ensure, $valid_ensures)
 
@@ -21,7 +23,8 @@ define s3cmd::file ($source, $ensure = 'latest', $bucket_location = 'eu-west-1',
                 logoutput => 'on_failure',
                 tries => $tries,
                 try_sleep => $try_sleep ,
-                unless => $unless
+                unless => $unless,
+                require => Package["$s3cmd::params::package"];
             }
 
     }
