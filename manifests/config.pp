@@ -12,6 +12,6 @@ define s3cmd::config ($s3key = '', $s3aid = '', $bucket_location = 'eu-west-1', 
         ensure => present,
         content => template('s3cmd/s3cmd.erb'),
         mode => '0600',
-        require => Package["$s3cmd::params::package"];
+        require => Package[$s3cmd::params::packages];
     }
 }

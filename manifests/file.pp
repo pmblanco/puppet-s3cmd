@@ -1,5 +1,14 @@
-define s3cmd::file ($source, $ensure = 'latest', $bucket_location = 'u-west-1',$path = '/root/.s3cfg', $tries = 3, $try_sleep = 1, cfg='/root/.s3cfg', $owner='root', group='root', $mode='600')  {
+define s3cmd::file ($source, $ensure = 'latest', $tries = 3, $try_sleep = 1, $cfg='/root/.s3cfg', $owner='root', $group='root', $mode='600', $recurse=false)  {
+
     include s3cmd::params
+
+    validate_bool($recurse)
+
+    if $recurse == true {
+        $cmd = 'get --recursive'
+    } else {
+        $cmd = 'get'
+    }
 
     $valid_ensures = [ 'absent', 'present', 'latest' ]
     validate_re($ensure, $valid_ensures)
@@ -8,28 +17,27 @@ define s3cmd::file ($source, $ensure = 'latest', $bucket_location = 'u-west-1',$
         file { $name:
         }
     } else {
-        $real_source = "s3://${bucket_location}s.s3.amazonaws.com/${source}"
 
-        # We need to double the code as there is no way to check via s3cmd if the file has changed. I mean if we check it we might as well just pull it off. 
-        if ensure == 'latest' {
-            $unless = "[ -e ${name} ] && s3cmd --no-progress --dry-run sync ${real_source} ${name} 2>&1 |grep -iq ${name}"
+        if $ensure == 'latest' {
+            $onlyif = "[ ! -e ${name} ] || s3cmd -c $cfg --no-progress --dry-run $cmd ${source} ${name} 2>&1 |grep -iq ${name}"
         } else {
-            $unless = "[ -e ${name} ]"
+            $onlyif = "[ ! -e ${name} ]"
         
         }
-    exec { "fetch {$name}": 
-                path => ['/bin', '/usr/bin', 'sbin', '/usr/sbin'],
-                command => "s3cmd --no-progress sync ${real_source} ${name}",
-                logoutput => 'on_failure',
-                tries => $tries,
-                try_sleep => $try_sleep ,
-                unless => $unless,
-                require => Package["$s3cmd::params::package"];
+    exec { "fetch ${name}": 
+                path        => ['/bin', '/usr/bin', 'sbin', '/usr/sbin'],
+                command     => "s3cmd -c $cfg --no-progress sync ${source} ${name}",
+                logoutput   => 'on_failure',
+                tries       => $tries,
+                try_sleep   => $try_sleep ,
+                onlyif      => $onlyif,
+                require     => Package[$s3cmd::params::packages],
      }
+     #notify {"S3cmd $target updated":}
      -> file { $name: 
-            mode  => $mode,
-            owner => 'root',
-            group  => 'root',
+            mode   => $mode,
+            owner  => "$owner",
+            group  => "$owner",
      }
 
     }
