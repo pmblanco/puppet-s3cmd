@@ -26,7 +26,7 @@ define s3cmd::file ($source, $ensure = 'latest', $tries = 3, $try_sleep = 1, $cf
         }
     exec { "fetch ${name}": 
                 path        => ['/bin', '/usr/bin', 'sbin', '/usr/sbin'],
-                command     => "s3cmd -c $cfg --no-progress sync ${source} ${name}",
+                command     => "s3cmd -c $cfg --no-progress $cmd ${source} ${name}",
                 logoutput   => 'on_failure',
                 tries       => $tries,
                 try_sleep   => $try_sleep ,
