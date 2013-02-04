@@ -38,7 +38,7 @@ define s3cmd::file ($source, $ensure = 'latest', $tries = 3, $try_sleep = 1, $cf
      -> file { $name: 
             mode   => $mode,
             owner  => "$owner",
-            group  => "$owner",
+            group  => "$group",
      }
 
     }
