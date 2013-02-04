@@ -20,13 +20,14 @@ define s3cmd::file ($source, $ensure = 'latest', $tries = 3, $try_sleep = 1, $cf
 
         if $ensure == 'latest' {
             $onlyif = "[ ! -e ${name} ] || s3cmd -c $cfg --no-progress --dry-run $cmd ${source} ${name} 2>&1 |grep -iq ${name}"
+            $force = '--force'
         } else {
             $onlyif = "[ ! -e ${name} ]"
         
         }
     exec { "fetch ${name}": 
                 path        => ['/bin', '/usr/bin', 'sbin', '/usr/sbin'],
-                command     => "s3cmd -c $cfg --no-progress $cmd ${source} ${name}",
+                command     => "s3cmd -c $cfg --no-progress $cmd $force ${source} ${name}",
                 logoutput   => 'on_failure',
                 tries       => $tries,
                 try_sleep   => $try_sleep ,
