@@ -1,4 +1,4 @@
-define s3cmd::file ($source, $ensure = 'latest', $tries = 3, $try_sleep = 1, $cfg='/root/.s3cfg', $owner='root', $group='root', $mode='600', $recurse=false)  {
+define s3cmd::file ($source, $ensure = 'latest', $tries = 3, $try_sleep = 1, $cfg='/root/.s3cfg', $owner='root', $group='root', $mode='600', $recurse=false, $target=$name)  {
 
     include s3cmd::params
 
@@ -19,7 +19,7 @@ define s3cmd::file ($source, $ensure = 'latest', $tries = 3, $try_sleep = 1, $cf
     } else {
 
         if $ensure == 'latest' {
-            $onlyif = "[ ! -e ${name} ] || s3cmd -c $cfg --no-progress --dry-run $cmd ${source} ${name} 2>&1 |grep -iq ${name}"
+            $onlyif = "[ ! -e ${name} ] || s3cmd -c $cfg --no-progress --dry-run $cmd ${source} ${target} 2>&1 |grep -iq ${name}"
             $force = '--force'
         } else {
             $onlyif = "[ ! -e ${name} ]"
@@ -27,7 +27,7 @@ define s3cmd::file ($source, $ensure = 'latest', $tries = 3, $try_sleep = 1, $cf
         }
     exec { "fetch ${name}": 
                 path        => ['/bin', '/usr/bin', 'sbin', '/usr/sbin'],
-                command     => "s3cmd -c $cfg --no-progress $cmd $force ${source} ${name}",
+                command     => "s3cmd -c $cfg --no-progress $cmd $force ${source} ${target}",
                 logoutput   => 'on_failure',
                 tries       => $tries,
                 try_sleep   => $try_sleep ,
