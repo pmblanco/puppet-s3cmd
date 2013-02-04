@@ -5,7 +5,7 @@ define s3cmd::file ($source, $ensure = 'latest', $tries = 3, $try_sleep = 1, $cf
     validate_bool($recurse)
 
     if $recurse == true {
-        $cmd = 'get --recursive'
+        $cmd = 'sync'
     } else {
         $cmd = 'get'
     }
