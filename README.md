@@ -57,6 +57,7 @@ s3cmd::file {'/tmp/test/':
 # In the following example /tmp needs to exist and /tmp/test will be created.
 s3cmd::file {'/tmp/test':
     source  => 's3://bucket/tmp/test',
+    target  => '/tmp/',
     recurse => true,
     ensure  => latest,
 }
