@@ -28,7 +28,13 @@ Usage:
 ```
 include s3cmd
 
-s3cmd::config {'s3cfg_main': s3aid => "_ID_", s3key => "_KEY_", bucket_location => 'eu-west-1' ;}
+s3cmd::config {'s3cfg_main':
+    s3aid => "_ID_",
+    s3key => "_KEY_",
+    bucket_location => 'eu-west-1'
+    # default path is /root/.s3cfg, you can specify custom path by
+    # path => '/custom/path/.s3cfg'
+}
 
 # You could use this statement which would end up downloading file every time puppet runs
 s3cmd::file {'/tmp/test.sh':
