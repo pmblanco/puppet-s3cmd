@@ -1,7 +1,7 @@
 class s3cmd::params {
 
-  case $::lsbdistid {
-    'Ubuntu','Debian' : {
+  case $::osfamily {
+    'Debian','RedHat' : {
       $packages = ['s3cmd','python-magic']
     }
     default: { fail("Unsupported OS: ${::lsbdistid}") }
