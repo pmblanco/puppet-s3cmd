@@ -53,4 +53,6 @@ define s3cmd::file (
       group => "$group",
     }
   }
+
+  S3cmd::Config <| path == $cfg |> -> S3cmd::File[$name]
 }
